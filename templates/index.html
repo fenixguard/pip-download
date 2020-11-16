@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>PIP DOWNLOAD</title>
+    <script src='/static/jquery-2.2.4.js'></script>
+    <script src='/static/js/FileSaver.js'></script>
+    <script src='/static/js/jszip.js'></script>
+</head>
+
+<body>
+<h1>Скачать пакеты для python с зависимостями</h1>
+<div style="margin: 8px">
+    <label for class="text">Введите название пакета</label>
+    <input id="package" type="text">
+</div>
+<div style="margin: 8px">
+    <label for class="text">Введите дополнительные опции</label>
+    <input id="options" type="text">
+</div>
+<div style="margin: 8px">
+    <button class="btn btn-default" onclick="submit()">Скачать</button>
+</div>
+<div style="margin: 8px">
+    <p>Download Options:</p>
+    <p>--platform &lt;platform&gt;</p>
+    <p>--python-version &lt;python_version&gt;</p>
+    <p style="color: red">-r, --requirement &lt;file&gt; - в разработке</p>
+</div>
+</body>
+<script>
+    function submit() {
+        $.ajax({
+            type: 'POST',
+            url: '/get_dependencies?package=' + $("#package").val() + '&options=' + $("#options").val(),
+            success: function (data) {
+                let zip = new JSZip();
+                zip.file("dependencies.zip", data, {base64: true});
+                zip.generateAsync({type: "blob"})
+                    .then(function (content) {
+                        saveAs(content, "archive_with_dependencies.zip");
+                    });
+            },
+            error: function () {
+                alert("Что-то пошло не так!");
+            }
+        });
+    }
+</script>
+</html>
