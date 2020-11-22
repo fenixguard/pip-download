@@ -4,14 +4,15 @@ import zipfile
 
 import pip
 import tempfile
-from base64 import b64encode
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 from flask_bootstrap import Bootstrap
 
 from parsers import pip_parser
 
 app = Flask(__name__)
 Bootstrap(app)
+
+BASE_DIR = os.getcwd()
 
 
 @app.route('/')
@@ -38,9 +39,9 @@ def get_dependencies():
             for file in files:
                 with open(os.path.join(temp, 'packages', file), mode='rb') as ff:
                     zip_file.writestr(file, ff.read())
-
         memory_zip.seek(0)
-        return b64encode(bytes(memory_zip.getvalue())), 200
+
+        return send_file(memory_zip, as_attachment=True, attachment_filename=f'{package}.zip')    # return b64encode(bytes(memory_zip.getvalue())), 200
 
 
 if __name__ == '__main__':
