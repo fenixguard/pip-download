@@ -7,7 +7,7 @@ import tempfile
 from flask import Flask, render_template, send_file
 from flask_bootstrap import Bootstrap
 
-from parsers import pip_parser
+from parsers import pip_parser, download_parser
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -41,7 +41,7 @@ def get_dependencies():
                     zip_file.writestr(file, ff.read())
         memory_zip.seek(0)
 
-        return send_file(memory_zip, as_attachment=True, attachment_filename=f'{package}.zip')    # return b64encode(bytes(memory_zip.getvalue())), 200
+        return send_file(memory_zip, as_attachment=True, attachment_filename=f'{package}.zip')   # return b64encode(bytes(memory_zip.getvalue())), 200
 
 
 if __name__ == '__main__':
