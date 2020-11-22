@@ -1,0 +1,83 @@
+/* navbar */
+.pip-nav {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #d3d3d3;
+}
+
+.pip-nav > div > a,
+.pip-nav > div > span {
+  position: relative;
+  text-decoration: none;
+  padding: 10px;
+  font-weight: 500;
+  font-size: 20px;
+  color: #666;
+  text-align: center;
+}
+
+.pip-nav > div > button {
+  position: relative;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 20px;
+  color: #666;
+  text-align: center;
+}
+
+.pip-nav > div > img {
+  margin-right: 32px;
+}
+
+.pip-nav > div > a:hover,
+.pip-nav > div > a:focus,
+.pip-nav > div > button:focus,
+.pip-nav > div > button:hover,
+.pip-nav > div > .active {
+  color: #000;
+}
+
+
+.pip-nav > div > .active:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  vertical-align: middle;
+  content: " ";
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid;
+  border-left: 5px solid transparent;
+  color: #eee;
+}
+
+.pip-nav__user {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.pip-nav__actions {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 75%;
+}
+
+.blog-main {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (min-width: 1600px) {
+  .container {
+    width: 1500px;
+  }
+}

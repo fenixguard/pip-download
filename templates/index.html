@@ -1,68 +1,67 @@
-{% extends "bootstrap/base.html" %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PIP DOWNLOAD</title>
-</head>
+{% extends "base.html" %}
+
+{% block navitems %}
+    <a class="active" href="/">PIP</a>
+{% endblock %}
 
 {% block content %}
-    <h1>Скачать пакеты для python с зависимостями</h1>
-    <div class="form-group" style="margin: 8px; width: 20%">
-        <label for class="text">Введите название пакета</label>
-        <input id="package" class="form-control" type="text">
-    </div>
-    <div class="form-group" style="margin: 8px; width: 20%">
-        <label for class="text">Введите дополнительные опции</label>
-        <input id="options" class="form-control" type="text">
-    </div>
-    <div style="margin: 8px">
-        <button id="downloadButton" class="btn btn-primary" onclick="submit()">Скачать</button>
-    </div>
-    <div style="margin: 8px">
-        <p style="color: orangered">Скачивание пакетов большого размера занимает <b>значительное время!</b></p>
-        <p style="color: orangered">По дефолту пакеты качаются none-any.whl либо python 3.7 linux_x86_64</p>
+    <div class="blog-main">
+        <h2>Скачивание пакетов с зависимостями</h2>
+        <div class="form-group" style="margin-top: 24px; width: 30%">
+            <label for class="text">Введите название пакета</label>
+            <input id="package" class="form-control" type="text">
+        </div>
+        <div class="form-group" style="margin-top: 24px; width: 65%">
+            <label for class="text">Введите дополнительные опции</label>
+            <input id="options" class="form-control" type="text">
+        </div>
+        <div style="margin-top: 24px">
+            <button id="downloadButton" class="btn btn-primary" onclick="submit()">Скачать</button>
+            <img id="downloadImg" style="width: 64px; height: 64px; margin-left: 128px; visibility: collapse"
+                 src="{{ url_for('static', filename='images/run_progress.gif') }}">
+        </div>
+        <div style="margin-top: 64px">
+            <p style="color: orangered">Скачивание пакетов большого размера занимает <b>значительное время!</b></p>
+            <p style="color: orangered">По дефолту пакеты качаются none-any.whl либо python 3.7 linux_x86_64</p>
 
-        <p>Пример дополнительный опций (больше примеров <a target="_blank" rel="noopener noreferrer"
-                                                           href="https://pip.pypa.io/en/stable/reference/pip_download/">тут</a>):
-        </p>
-        <em style="color: blue">linux</em>
-        <p>--only-binary=:all:
-            --platform linux_x86_64
-            --python-version 3
-            --implementation cp
-            --abi cp34m
-        </p>
-        <em style="color: blue">macosx</em>
-        <p>--only-binary=:all:
-            --platform macosx-10_10_x86_64
-            --python-version 27
-            --implementation cp
-        </p>
-        <em style="color: blue">any</em>
-        <p>--only-binary=:all:
-            --platform any
-            --python-version 3
-            --implementation py
-            --abi none
-        </p>
-        <em style="color: blue">windows</em>
-        <p>--only-binary=:all:
-            --platform win_amd64
-            --python-version 3
-            --implementation py
-            --abi none
-        </p>
-        <p style="color: red"><b>-r, --requirement &lt;file&gt; - в разработке</b></p>
+            <p>Пример дополнительный опций (больше примеров <a target="_blank" rel="noopener noreferrer"
+                                                               href="https://pip.pypa.io/en/stable/reference/pip_download/">тут</a>):
+            </p>
+            <em style="color: blue">linux</em>
+            <p>--only-binary=:all:
+                --platform linux_x86_64
+                --python-version 3
+                --implementation cp
+                --abi cp34m
+            </p>
+            <em style="color: blue">macosx</em>
+            <p>--only-binary=:all:
+                --platform macosx-10_10_x86_64
+                --python-version 27
+                --implementation cp
+            </p>
+            <em style="color: blue">any</em>
+            <p>--only-binary=:all:
+                --platform any
+                --python-version 3
+                --implementation py
+                --abi none
+            </p>
+            <em style="color: blue">windows</em>
+            <p>--only-binary=:all:
+                --platform win_amd64
+                --python-version 3
+                --implementation py
+                --abi none
+            </p>
+            <p style="color: red"><b>-r, --requirement &lt;file&gt; - в разработке</b></p>
 
+        </div>
     </div>
-{% endblock %}
-{% block scripts %}
-    <script src='/static/jquery-2.2.4.js'></script>
-    <script src='/static/js/FileSaver.js'></script>
-    <script src='/static/js/jszip.js'></script>
+
     <script>
         function submit() {
-
+            $("#downloadImg").css('visibility', 'visible');
             $("#downloadButton").text('Идет загрузка').attr("disabled", true);
             $("#downloadButton").removeClass('btn-primary');
             $("#downloadButton").addClass('btn-warning');
@@ -73,13 +72,22 @@
                 success: function () {
                     window.location.href = '/get_dependencies?package=' + $("#package").val() + '&options=' + $("#options").val();
                     setTimeout(function () {
+                        $("#downloadImg").css('visibility', 'collapse');
                         $("#downloadButton").text('Скачать').attr("disabled", false);
                         $("#downloadButton").removeClass('btn-warning');
                         $("#downloadButton").addClass('btn-primary');
-                    }, 4000);
+                    }, 5000);
+                },
+                error: function () {
+                    alert("Проверь название пакета!")
+                    setTimeout(function () {
+                        $("#downloadImg").css('visibility', 'collapse');
+                        $("#downloadButton").text('Скачать').attr("disabled", false);
+                        $("#downloadButton").removeClass('btn-warning');
+                        $("#downloadButton").addClass('btn-primary');
+                    }, 100);
                 }
             });
         }
     </script>
 {% endblock %}
-</html>

@@ -1,26 +1,33 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        {% block head %}
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Custom PIP</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='js/bootstrap.js') }}">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="/static/images/ricardo-milos.gif">
+</head>
+<body style="overflow-y: scroll">
 
-        {% block styles %}
-            <!-- Bootstrap CSS -->
-            {{ bootstrap.load_css() }}
-        {% endblock %}
+{% block navbar %}
+    <div class="pip-nav container">
+        <div class="pip-nav__actions">
+            <img style="height: 32px; width: 32px;" src="{{ url_for('static', filename='images/Python-logo.svg') }}"/>
 
-        <title>PIP DOWNLOAD</title>
+            {% block navitems %}
+                <a href="/">PIP</a>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+    <script src="{{ url_for('static', filename='jquery-2.2.4.js')}}"></script>
+<div class="container">
+    <div style="margin-top: 20pt">
+        {% block content %}
         {% endblock %}
-    </head>
-    <body>
-        <!-- Your page content -->
-        {% block content %}{% endblock %}
-
-        {% block scripts %}
-            <!-- Optional JavaScript -->
-            {{ bootstrap.load_js() }}
-        {% endblock %}
-    </body>
-</html>
+    </div>
+</div>
+</body>

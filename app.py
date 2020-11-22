@@ -7,7 +7,7 @@ import tempfile
 from flask import Flask, render_template, send_file
 from flask_bootstrap import Bootstrap
 
-from parsers import pip_parser, download_parser
+from parsers import pip_parser
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -33,6 +33,8 @@ def get_dependencies():
             pip.main(['download', '-d', os.path.join(temp, 'packages'), package])
 
         files = os.listdir(os.path.join(temp, 'packages'))
+        if len(files) == 0:
+            return '', 500
         memory_zip = io.BytesIO()
         with zipfile.ZipFile(memory_zip, mode='w', compression=zipfile.ZIP_DEFLATED) as zip_file:
 
