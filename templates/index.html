@@ -2,6 +2,7 @@
 
 {% block navitems %}
     <a class="active" href="/">PIP</a>
+    <a href="/requirements">Requirements</a>
 {% endblock %}
 
 {% block content %}
@@ -66,17 +67,20 @@
             $("#downloadButton").removeClass('btn-primary');
             $("#downloadButton").addClass('btn-warning');
 
+            let package = $("#package").val();
+            let options = $("#options").val();
+
             $.ajax({
                 type: 'POST',
-                url: '/get_dependencies?package=' + $("#package").val() + '&options=' + $("#options").val(),
-                success: function () {
-                    window.location.href = '/get_dependencies?package=' + $("#package").val() + '&options=' + $("#options").val();
+                url: `/post_dependencies?package=${package}&options=${options}`,
+                success: function (f) {
+                    window.location = `/get_dependencies?package=${package}&options=${options}`;
                     setTimeout(function () {
                         $("#downloadImg").css('visibility', 'collapse');
                         $("#downloadButton").text('Скачать').attr("disabled", false);
                         $("#downloadButton").removeClass('btn-warning');
                         $("#downloadButton").addClass('btn-primary');
-                    }, 5000);
+                    }, 3000);
                 },
                 error: function () {
                     alert("Проверь название пакета!")

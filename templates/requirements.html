@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block navitems %}
+    <a href="/">PIP</a>
+    <a class="active" href="/requirements">Requirements</a>
+{% endblock %}
+
+{% block content %}
+    <div class="blog-main">
+        <h2>Скачивание пакетов из requirements.txt</h2>
+        <div class="form-group" style="margin-top: 24px; width: 65%">
+            <label for class="text">Введите дополнительные опции</label>
+            <input id="options" class="form-control" type="text">
+        </div>
+        <div id="Files"
+             style="display: flex; margin-top: 16px; align-items: center; flex-direction: row; justify-content: flex-start;  flex-wrap: wrap;">
+            <label class="control-label" id="files">Файл</label>
+            <div id="dropForm">
+                <form id="upload" onsubmit="javascript:void(0)" enctype="multipart/form-data">
+                    <div id="drop">
+                        Перетащите сюда
+                        <a onclick="exploreClicked()">Обзор</a>
+                        <input type="file" id="upl"/>
+                    </div>
+                </form>
+            </div>
+
+            <div id="progressTable"
+                 style="display: grid; grid-template-columns: 1fr 2fr 1fr; grid-column-gap: 12px; visibility: hidden; width: 1256px; margin-left: 32px; height: 0">
+                <div style="align-self: center"><b id="fileName"></b></div>
+                <div class='progress' id="fileUploadProgress"
+                     style="align-self: center; margin-bottom: 0; box-shadow: 0 0 4px rgba(0,0,0,.3)">
+                    <div class="progress-bar progress-bar-success upProgress" role="progressbar" style="width: 0">0%
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger" id="fileCancel"
+                        style="align-self: center; margin-left: 32px; margin-right: 32px">
+                    Отменить загрузку
+                </button>
+            </div>
+        </div>
+
+        <div id="alertUpFile" class="alert alert-danger alert__hide">
+            <span>Загрузка <b id="alert_danger_filename"></b> отменена!</span>
+        </div>
+
+        <div id="alertReload" class="alert alert-warning alert__hide">
+            <span><b>Дождитесь загрузки файла или отмените загрузку, нажав на область прогресса!</b></span>
+        </div>
+
+        <div id="alertCompleted" class="alert alert-success alert__hide">
+            <span>Файл <b id="alert_success_filename"></b> загружен!</span>
+        </div>
+
+        <style>
+            .alert__hide {
+                width: 400px;
+                position: fixed;
+                left: -1000px;
+                bottom: 64px;
+                transition: left 0.3s ease-in;
+            }
+
+            .alert__show {
+                left: 64px;
+                transition: left 0.3s ease-in;
+            }
+        </style>
+
+
+        <script>
+            function my_onkeydown_handler(event) {
+                switch (event.keyCode) {
+                    case 116 : //F5 button
+                        event.returnValue = false;
+                        event.keyCode = 0;
+                        $("#alertReload").addClass("alert__show");
+                        setTimeout(() => {
+                            $("#alertReload").removeClass("alert__show");
+                        }, 3000);
+                        return false;
+                    case 82 : //R button
+                        if (event.ctrlKey) {
+                            event.returnValue = false;
+                            event.keyCode = 0;
+                            $("#alertReload").addClass("alert__show");
+                            setTimeout(() => {
+                                $("#alertReload").removeClass("alert__show");
+                            }, 3000);
+                            return false;
+                        }
+                }
+            }
+
+
+            function exploreClicked() {
+                $('#upl').click();
+            }
+
+            $(document).ready(function () {
+
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+                    document.getElementById('drop').addEventListener(event, (ev) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                    });
+                });
+
+                $('#drop')
+                    .on('dragenter', function () {
+                        $('#drop').addClass('drop-hover');
+                    })
+                    .on('dragleave', function () {
+                        $('#drop').removeClass('drop-hover');
+                    })
+                    .on('dragover', function () {
+                        $('#drop').addClass('drop-hover');
+                    })
+                    .on('drop', function (e) {
+                        fileInputChanged(e.originalEvent.dataTransfer.files);
+                    });
+
+                function fileInputChanged(files) {
+                    let file = files[0];
+                    let formData = new FormData();
+                    formData.append('requirements', file);
+                    formData.append('options', $("#options").val());
+
+                    document.addEventListener("keydown", my_onkeydown_handler);
+                    $('#upload').attr('disabled', true);
+                    $('#fileName').html(file.name);
+                    $('#files').css('visibility', 'collapse').css('width', '0');
+                    $('#dropForm').css('visibility', 'collapse').css('height', '0').css('width', '0');
+                    $('#progressTable').css('height', 'auto').css('visibility', 'visible');
+
+                    let progress = $('.upProgress');
+                    progress.text('0%');
+                    progress.css('width', 0);
+                    $('#fileUploadProgress').css('width', 'auto');
+                    $('#fileCancel').css('visibility', 'visible');
+                    $('#drop').removeClass('drop-hover');
+
+                    ajaxCall = $.ajax({
+                        type: 'POST',
+                        url: '/requirements/post_requirements',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        xhr: function () {
+                            let xhr = new window.XMLHttpRequest();
+                            xhr.upload.addEventListener("progress", function (evt) {
+                                if (evt.lengthComputable) {
+                                    let percentComplete = ((evt.loaded / evt.total) * 100).toFixed();
+                                    progress.text(percentComplete + '%');
+                                    progress.css('width', percentComplete + '%');
+                                }
+                            }, false);
+                            return xhr;
+                        },
+                        success: function (f) {
+                            document.removeEventListener("keydown", my_onkeydown_handler);
+                            $('#progress').css('width', '0%');
+                            $('#progressTable').css('height', '0').css('visibility', 'hidden');
+                            $('#fileCancel').css('visibility', 'hidden');
+                            $('#files').css('visibility', 'visible').css('width', 'auto');
+                            $('#dropForm').css('visibility', 'visible').css('height', 'auto').css('width', 'auto');
+                            $("#alert_success_filename").html(file.name);
+                            $("#alertCompleted").addClass("alert__show");
+                            window.location = '/requirements/get_requirements';
+                            setTimeout(() => {
+                                $("#alertCompleted").removeClass("alert__show");
+                            }, 3000);
+                        },
+                        error: function (er) {
+                            $('#progress').css('width', '100%');
+                            $('#progress').css('background-color', 'red');
+                            $("#alert_danger_filename").html(file.name);
+                            $("#alertUpFile").addClass("alert__show");
+                            setTimeout(() => {
+                                $("#alertUpFile").removeClass("alert__show");
+                                $('#progress').css('width', '0%');
+                                $('#progress').css('background-color', '#3e8f3e');
+                            }, 3000);
+                            document.removeEventListener("keydown", my_onkeydown_handler);
+                            $('#progressTable').css('height', '0').css('visibility', 'hidden');
+                            $('#fileCancel').css('visibility', 'hidden');
+                            $('#files').css('visibility', 'visible').css('width', 'auto');
+                            $('#dropForm').css('visibility', 'visible').css('height', 'auto').css('width', 'auto');
+                            alert(er.responseJSON.message);
+                        }
+                    });
+                }
+
+                $('#upl').change((e) => {
+                    fileInputChanged(e.target.files);
+                });
+            });
+
+            $('#fileCancel').click(function () {
+                ajaxCall.abort()
+            });
+
+        </script>
+    </div>
+{% endblock %}

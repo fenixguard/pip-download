@@ -6,7 +6,6 @@
     <title>Custom PIP</title>
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='js/bootstrap.js') }}">
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" href="/static/images/ricardo_milos.ico" type="image/x-icon">
 </head>
@@ -19,11 +18,14 @@
 
             {% block navitems %}
                 <a href="/">PIP</a>
+                <a href="/">Requirements</a>
             {% endblock %}
         </div>
     </div>
 {% endblock %}
     <script src="{{ url_for('static', filename='jquery-2.2.4.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js')}}"></script>
+
 <div class="container">
     <div style="margin-top: 20pt">
         {% block content %}

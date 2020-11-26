@@ -81,3 +81,103 @@
     width: 1500px;
   }
 }
+
+#drop.drop-hover {
+  background-color: rgba(102, 102, 102, 0.3);
+
+}
+
+.label {
+  font-family: "Georgia", serif;
+  font-size: 14px;
+  padding: 6px;
+  font-weight: normal;
+}
+
+.control-label {
+  margin-bottom: 10px;
+}
+
+.drag-area {
+  margin: 8px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid black;
+}
+
+.drag-area-default {
+  margin: 2px;
+}
+
+.drag-area-hover {
+  background-color: #555;
+  color: white;
+}
+
+.drag-area-default > span {
+  margin: 0 2px;
+  display: block;
+  text-align: center;
+  font-size: 14px;
+}
+
+.drag-area-default > p {
+  text-align: center;
+  align-self: flex-end;
+  margin: 0;
+}
+
+#upload{
+    font-family:'PT Sans Narrow', sans-serif;
+    background-color: #666666;
+
+    background-image:-webkit-linear-gradient(top, #cccccc, #cccccc);
+    background-image:-moz-linear-gradient(top, #cccccc, #cccccc);
+    background-image:linear-gradient(top, #cccccc, #cccccc);
+
+    width:250px;
+    height: 95px;
+    padding:2px;
+    border-radius:3px;
+    margin-left: 10px;
+
+    box-shadow: 0 0 10px rgba(128, 128, 128, 0.3);
+}
+
+#drop{
+    background-color: #cccccc;
+    padding: 4px;
+    border: 4px solid rgba(119, 119, 119, 0);
+    border-radius: 3px;
+    text-align: center;
+    text-transform: uppercase;
+
+    font-size:16px;
+    font-weight:bold;
+    color:#7f858a;
+}
+
+#drop.drop-hover {
+  background-color: rgba(102, 102, 102, 0.3);
+
+}
+
+#drop a{
+    background-color: #777777;
+    padding:12px 26px;
+    color:#fff;
+    font-size:14px;
+    border-radius:2px;
+    cursor:pointer;
+    display:inline-block;
+    margin-top:12px;
+    line-height:1;
+}
+
+#drop a:hover{
+    background-color: #000000;
+}
+
+#drop input{
+    display:none;
+}
