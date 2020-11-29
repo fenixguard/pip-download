@@ -10,11 +10,11 @@
         <h2>Скачивание пакетов с зависимостями</h2>
         <div class="form-group" style="margin-top: 24px; width: 30%">
             <label for class="text">Введите название пакета</label>
-            <input id="package" class="form-control" type="text">
+            <input id="package" class="form-control" type="text" placeholder="Название пакета (Flask, Django>=2.1 и т.д.)">
         </div>
         <div class="form-group" style="margin-top: 24px; width: 65%">
             <label for class="text">Введите дополнительные опции</label>
-            <input id="options" class="form-control" type="text">
+            <input id="options" class="form-control" type="text" placeholder="Необязательное поле">
         </div>
         <div style="margin-top: 24px">
             <button id="downloadButton" class="btn btn-primary" onclick="submit()">Скачать</button>
@@ -55,8 +55,6 @@
                 --implementation py
                 --abi none
             </p>
-            <p style="color: red"><b>-r, --requirement &lt;file&gt; - в разработке</b></p>
-
         </div>
     </div>
 

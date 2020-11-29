@@ -10,7 +10,7 @@
         <h2>Скачивание пакетов из requirements.txt</h2>
         <div class="form-group" style="margin-top: 24px; width: 65%">
             <label for class="text">Введите дополнительные опции</label>
-            <input id="options" class="form-control" type="text">
+            <input id="options" class="form-control" type="text" placeholder="Сначала введите опции (если необходимо)">
         </div>
         <div id="Files"
              style="display: flex; margin-top: 16px; align-items: center; flex-direction: row; justify-content: flex-start;  flex-wrap: wrap;">
@@ -38,6 +38,43 @@
                     Отменить загрузку
                 </button>
             </div>
+        </div>
+
+        <div style="margin-top: 64px">
+            <p style="color: orangered">После выбора файла сразу начнется загрузка и скачивание файлов!</p>
+            <p style="color: orangered">Скачивание пакетов большого размера занимает <b>значительное время!</b></p>
+            <p style="color: orangered">По дефолту пакеты качаются none-any.whl либо python 3.7 linux_x86_64</p>
+
+            <p>Пример дополнительный опций (больше примеров <a target="_blank" rel="noopener noreferrer"
+                                                               href="https://pip.pypa.io/en/stable/reference/pip_download/">тут</a>):
+            </p>
+            <em style="color: blue">linux</em>
+            <p>--only-binary=:all:
+                --platform linux_x86_64
+                --python-version 3
+                --implementation cp
+                --abi cp34m
+            </p>
+            <em style="color: blue">macosx</em>
+            <p>--only-binary=:all:
+                --platform macosx-10_10_x86_64
+                --python-version 27
+                --implementation cp
+            </p>
+            <em style="color: blue">any</em>
+            <p>--only-binary=:all:
+                --platform any
+                --python-version 3
+                --implementation py
+                --abi none
+            </p>
+            <em style="color: blue">windows</em>
+            <p>--only-binary=:all:
+                --platform win_amd64
+                --python-version 3
+                --implementation py
+                --abi none
+            </p>
         </div>
 
         <div id="alertUpFile" class="alert alert-danger alert__hide">
