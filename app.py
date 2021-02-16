@@ -1,6 +1,7 @@
 import io
 import os
 import zipfile
+import requests
 import shutil
 from subprocess import Popen
 from typing import Optional
@@ -123,6 +124,20 @@ def get_dependencies():
 
     return send_file(get_zip_stream(), as_attachment=True,
                      attachment_filename=f'{package}.zip')
+
+
+@app.route('/show_dependencies', methods=['GET'])
+def show_dependencies():
+    args = pip_parser.parse_args()
+    package: str = args['package']
+    response = requests.get(f"https://pypi.python.org/pypi/{package}/json")
+    data = response.json()
+    deps = str()
+    if data['info']['requires_dist'] is None:
+        return 'Информация по зависимостям данного пакета не доступна, попробуйте просто скачать'
+    for d in data['info']['requires_dist']:
+        deps += f"{d}<br>"
+    return deps
 
 
 if __name__ == '__main__':
